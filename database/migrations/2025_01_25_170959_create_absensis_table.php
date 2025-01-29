@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id(); // Kolom id sebagai primary key
             $table->string('NISN'); // Kolom NISN sebagai foreign key
             $table->enum('status', ['Sakit', 'Izin', 'Alpa'])->default('Alpa'); // Status ketidakhadiran
-            $table->text('alasan'); // Kolom alasan ketidakhadiran
+            // $table->text('alasan'); // Kolom alasan ketidakhadiran
             $table->date('tanggal'); // Kolom tanggal absensi
             $table->timestamps(); // timestamps untuk created_at dan updated_at
 

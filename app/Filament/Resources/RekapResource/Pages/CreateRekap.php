@@ -7,8 +7,13 @@ use Filament\Actions;
 use Filament\Resources\Pages\CreateRecord;
 
 class CreateRekap extends CreateRecord
-{
-    protected static ?string $navigationLabel = 'Nama Page';
-    
+{   
     protected static string $resource = RekapResource::class;
+
+    protected function getHeaderActions(): array
+    {
+        return [
+            Actions\CreateAction::make(),
+        ];
+    }
 }
