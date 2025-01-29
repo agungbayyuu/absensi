@@ -2,27 +2,18 @@
 
 namespace App\Filament\Resources;
 
-use Filament\Forms;
 use Filament\Tables;
 use App\Models\Rekap;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
-use Illuminate\Support\Facades\DB;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
-use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\RekapResource\Pages;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
-use App\Filament\Resources\RekapResource\RelationManagers;
 use AymanAlhattami\FilamentPageWithSidebar\PageNavigationItem;
 use AymanAlhattami\FilamentPageWithSidebar\FilamentPageSidebar;
 use App\Filament\Resources\RekapResource\RelationManagers\AbsensiRelationManager;
-use AymanAlhattami\FilamentPageWithSidebar\Traits\HasPageSidebar;
-use Illuminate\Database\Eloquent\Model;
 use Filament\Pages\SubNavigationPosition;
-use Filament\Resources\Pages\Page;
-
 
 class RekapResource extends Resource
 {   
@@ -120,24 +111,23 @@ class RekapResource extends Resource
             ->setNavigationItems([
                 PageNavigationItem::make('Semua Rekap')
                     ->icon('heroicon-o-rectangle-stack')
-                    ->url(static::getUrl('index'))
-                    ->isActiveWhen(fn () => request()->routeIs('filament.admin.resources.rekaps.index')),
+                    ->url(static::getUrl('index')) // Tidak ada filter
+                    ->isActiveWhen(fn () => !request()->has('kelas')), // Aktif jika tidak ada filter kelas
 
-                PageNavigationItem::make('Kelas')
-                    ->isSection(),
+                PageNavigationItem::make('--- Kelas ---'),
 
-                // Daftar kelas
                 ...collect([
                     'X1', 'X2', 'X3', 'X4',
                     'XI1', 'XI2', 'XI3', 'XI4',
                     'XII1', 'XII2', 'XII3', 'XII4'
-                ])->map(fn ($kelas) => 
+                ])->map(fn ($kelas) =>
                     PageNavigationItem::make("Kelas $kelas")
                         ->icon('heroicon-o-academic-cap')
-                        ->url(static::getUrl('index', ['tableFilters' => ['Kelas' => $kelas]]))
-                        ->isActiveWhen(fn () => request()->get('tableFilters.Kelas') === $kelas)
+                        ->url(static::getUrl('index', ['kelas' => $kelas])) // Ubah dari 'tableFilters' ke 'kelas'
+                        ->isActiveWhen(fn () => request()->query('kelas') === $kelas) // Cek berdasarkan query string
                 ),
             ]);
     }
+
 
 }

@@ -5,7 +5,6 @@ namespace App\Filament\Resources\RekapResource\Pages;
 use App\Filament\Resources\RekapResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
-use Filament\Resources\Components\Tab;
 use Illuminate\Database\Eloquent\Builder;
 use AymanAlhattami\FilamentPageWithSidebar\Traits\HasPageSidebar;
 
@@ -15,6 +14,22 @@ class ListRekaps extends ListRecords
 
     public static string $resource = RekapResource::class;
 
+        // Menambahkan filter berdasarkan URL
+        protected function getTableQuery(): Builder
+        {
+            // Ambil parameter 'kelas' dari URL
+            $query = parent::getTableQuery();
+    
+            $kelas = request()->query('kelas'); // Ambil parameter kelas dari URL
+            
+            if ($kelas) {
+                // Jika ada kelas, lakukan filter berdasarkan kelas
+                $query->where('kelas', $kelas);
+            }
+    
+            return $query;
+        }
+
     protected function getHeaderActions(): array
     {
         return [
@@ -22,17 +37,9 @@ class ListRekaps extends ListRecords
         ];
     }
 
-    public function getTabs(): array
+    protected function getSidebar()
     {
-        return [
-            'X1' => Tab::make()
-                ->modifyQueryUsing(fn (Builder $query) => $query->where('kelas', 'X1')),
-            'X2' => Tab::make()
-                ->modifyQueryUsing(fn (Builder $query) => $query->where('kelas', 'X2')),
-            'X3' => Tab::make()
-                ->modifyQueryUsing(fn (Builder $query) => $query->where('kelas', 'X3')),
-            'X4' => Tab::make()
-                ->modifyQueryUsing(fn (Builder $query) => $query->where('kelas', 'X4')),
-        ];
+        return static::getResource()::sidebar();
     }
+
 }
