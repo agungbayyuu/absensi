@@ -8,11 +8,20 @@ use App\Models\Rekap;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
+use Illuminate\Support\Facades\DB;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
+use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\RekapResource\Pages;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Resources\RekapResource\RelationManagers;
+use AymanAlhattami\FilamentPageWithSidebar\PageNavigationItem;
+use AymanAlhattami\FilamentPageWithSidebar\FilamentPageSidebar;
 use App\Filament\Resources\RekapResource\RelationManagers\AbsensiRelationManager;
-
+use AymanAlhattami\FilamentPageWithSidebar\Traits\HasPageSidebar;
+use Illuminate\Database\Eloquent\Model;
+use Filament\Pages\SubNavigationPosition;
+use Filament\Resources\Pages\Page;
 
 
 class RekapResource extends Resource
@@ -21,6 +30,8 @@ class RekapResource extends Resource
     protected static ?string $model = Rekap::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+
+    protected static SubNavigationPosition $subNavigationPosistion = SubNavigationPosition::Start;
 
     public static function form(Form $form): Form
     {
@@ -42,7 +53,7 @@ class RekapResource extends Resource
                 TextColumn::make('kelas')
                     ->label('Kelas')
                     ->sortable()
-                    ->searchable(),
+                    ->searchable(), 
 
                 TextColumn::make('sakit_count')
                     ->label('Total Sakit')
@@ -96,10 +107,37 @@ class RekapResource extends Resource
     public static function getPages(): array
     {
         return [
-            'X1' => Pages\ListRekaps::route('/'),
             'index' => Pages\ListRekaps::route('/'),
             'create' => Pages\CreateRekap::route('/create'),
             'edit' => Pages\EditRekap::route('/{record}/edit'),
         ];
     }
+
+    public static function sidebar(): FilamentPageSidebar
+    {
+        return FilamentPageSidebar::make()
+            ->setTitle('Rekap Per Kelas')
+            ->setNavigationItems([
+                PageNavigationItem::make('Semua Rekap')
+                    ->icon('heroicon-o-rectangle-stack')
+                    ->url(static::getUrl('index'))
+                    ->isActiveWhen(fn () => request()->routeIs('filament.admin.resources.rekaps.index')),
+
+                PageNavigationItem::make('Kelas')
+                    ->isSection(),
+
+                // Daftar kelas
+                ...collect([
+                    'X1', 'X2', 'X3', 'X4',
+                    'XI1', 'XI2', 'XI3', 'XI4',
+                    'XII1', 'XII2', 'XII3', 'XII4'
+                ])->map(fn ($kelas) => 
+                    PageNavigationItem::make("Kelas $kelas")
+                        ->icon('heroicon-o-academic-cap')
+                        ->url(static::getUrl('index', ['tableFilters' => ['Kelas' => $kelas]]))
+                        ->isActiveWhen(fn () => request()->get('tableFilters.Kelas') === $kelas)
+                ),
+            ]);
+    }
+
 }
