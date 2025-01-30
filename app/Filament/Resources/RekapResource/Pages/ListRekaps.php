@@ -7,6 +7,7 @@ use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 use Illuminate\Database\Eloquent\Builder;
 use AymanAlhattami\FilamentPageWithSidebar\Traits\HasPageSidebar;
+use Filament\Actions\Modal\Actions\Action;
 
 class ListRekaps extends ListRecords
 {
@@ -33,7 +34,10 @@ class ListRekaps extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            // Actions\CreateAction::make(),
+            Actions\ButtonAction::make('Laporan pdf')->url(fn()=> route('download.tes'))
+            ->openUrlInNewTab(),
+            
         ];
     }
 

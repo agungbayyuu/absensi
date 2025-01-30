@@ -2,8 +2,6 @@
 
 namespace App\Filament\Resources;
 
-use Filament\Forms;
-use Filament\Tables;
 use App\Models\Absensi;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
@@ -11,12 +9,8 @@ use Filament\Resources\Resource;
 use Filament\Forms\Components\Card;
 use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
-use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\AbsensiResource\Pages;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
-use App\Filament\Resources\AbsensiResource\RelationManagers;
 
 class AbsensiResource extends Resource
 {
@@ -90,18 +84,18 @@ class AbsensiResource extends Resource
                 TextColumn::make('siswa.kelas')->label('Kelas'), // Menampilkan kelas dari relasi
                 TextColumn::make('status'),
                 // TextColumn::make('alasan'),
-                TextColumn::make('tanggal'),
+                // TextColumn::make('tanggal'),
             ])
             ->filters([
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                // Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
+                // Tables\Actions\BulkActionGroup::make([
+                //     Tables\Actions\DeleteBulkAction::make(),
+                // ]),
             ]);
     }
 
