@@ -54,16 +54,17 @@ return [
     'channels' => [
         'stack' => [
             'driver' => 'stack',
-            'channels' => ['single'],
+            'channels' => ['stderr'],
             'ignore_exceptions' => false,
         ],
 
-        'single' => [
-            'driver' => 'single',
-            'path' => storage_path('logs/laravel.log'),
-            'level' => env('LOG_LEVEL', 'debug'),
-            'replace_placeholders' => true,
+        'stderr' => [
+        'driver' => 'monolog',
+        'handler' => \Monolog\Handler\StreamHandler::class,
+        'with' => [
+            'stream' => 'php://stderr',
         ],
+    ],
 
         'daily' => [
             'driver' => 'daily',

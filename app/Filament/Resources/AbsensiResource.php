@@ -11,6 +11,7 @@ use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\DatePicker;
 use App\Filament\Resources\AbsensiResource\Pages;
+use Filament\Tables\Filters\SelectFilter;
 
 class AbsensiResource extends Resource
 {
@@ -87,7 +88,22 @@ class AbsensiResource extends Resource
                 // TextColumn::make('tanggal'),
             ])
             ->filters([
-                //
+                SelectFilter::make('tanggal')
+                    ->form([
+                        DatePicker::make('from'),
+                        DatePicker::make('until'),
+                    ])
+                    ->query(function ($query, array $data) {
+                        return $query
+                            ->when(
+                                $data['from'],
+                                fn($query) => $query->whereDate('tanggal', '>=', $data['from'])
+                            )
+                            ->when(
+                                $data['until'],
+                                fn($query) => $query->whereDate('tanggal', '<=', $data['until'])
+                            );
+                    })
             ])
             ->actions([
                 // Tables\Actions\EditAction::make(),

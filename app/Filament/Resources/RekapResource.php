@@ -14,6 +14,9 @@ use AymanAlhattami\FilamentPageWithSidebar\PageNavigationItem;
 use AymanAlhattami\FilamentPageWithSidebar\FilamentPageSidebar;
 use App\Filament\Resources\RekapResource\RelationManagers\AbsensiRelationManager;
 use Filament\Pages\SubNavigationPosition;
+use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\Filter;
+use Illuminate\Database\Eloquent\Builder;
 
 class RekapResource extends Resource
 {   
@@ -76,7 +79,27 @@ class RekapResource extends Resource
                         'XII2' => 'XII2',
                         'XII3' => 'XII3',
                         'XII4' => 'XII4',
+                    ]),
+                
+                // Menambahkan filter rentang tanggal
+                SelectFilter::make('created_at')
+                    ->form([
+                        DatePicker::make('from')
+                            ->label('Dari Tanggal'),
+                        DatePicker::make('until')
+                            ->label('Sampai Tanggal'),
                     ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query
+                            ->when(
+                                $data['from'],
+                                fn ($query, $date): Builder => $query->whereDate('created_at', '>=', $date),
+                            )
+                            ->when(
+                                $data['until'],
+                                fn ($query, $date): Builder => $query->whereDate('created_at', '<=', $date),
+                            );
+                    }),
             ])
             ->actions([
                 // Tables\Actions\EditAction::make(),
