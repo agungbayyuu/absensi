@@ -4,6 +4,9 @@
 @endphp
 
 <div>
+    <head>
+        <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    </head>
     @if($sidebar->getPageNavigationLayout() == \AymanAlhattami\FilamentPageWithSidebar\Enums\PageNavigationLayoutEnum::Sidebar)
         <div class="mt-8">
             <div class="grid grid-cols-12 gap-4 sm:gap-5 lg:gap-6">
