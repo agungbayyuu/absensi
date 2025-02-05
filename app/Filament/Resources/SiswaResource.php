@@ -4,7 +4,7 @@ namespace App\Filament\Resources;
 
 use Filament\Forms;
 use Filament\Tables;
-use App\Models\Siswa;
+use App\Models\siswa;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
@@ -20,7 +20,7 @@ use App\Filament\Resources\SiswaResource\RelationManagers;
 
 class SiswaResource extends Resource
 {
-    protected static ?string $model = Siswa::class;
+    protected static ?string $model = siswa::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 

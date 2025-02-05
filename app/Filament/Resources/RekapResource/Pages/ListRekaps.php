@@ -3,10 +3,11 @@
 namespace App\Filament\Resources\RekapResource\Pages;
 
 use App\Filament\Resources\RekapResource;
-use Filament\Actions;
+use Filament\Actions\Actions;
 use Filament\Resources\Pages\ListRecords;
 use Illuminate\Database\Eloquent\Builder;
 use AymanAlhattami\FilamentPageWithSidebar\Traits\HasPageSidebar;
+use Filament\Actions\ButtonAction;
 use Filament\Actions\Modal\Actions\Action;
 
 class ListRekaps extends ListRecords
@@ -35,7 +36,7 @@ class ListRekaps extends ListRecords
     {
         return [
             // Actions\CreateAction::make(),
-            Actions\ButtonAction::make('Laporan pdf')->url(fn()=> route('download.tes'))
+            ButtonAction::make('Laporan pdf')->url(fn()=> route('download.tes'))
             ->openUrlInNewTab(),
             
         ];
